@@ -1,0 +1,43 @@
+	mport json
+from paho.mqtt import client as mqtt_client
+
+BROKER = 'localhost'
+PORT   = 1883
+TOPIC  = 'digital-twin/sensor'
+
+def on_connect(client, userdata, flags, rc):
+    print("Connected to MQTT, code =", rc)
+
+def on_message(client, userdata, msg):
+    print(msg.payload.decode())
+
+# Explicit olarak v3.1.1 protokolü kullanın
+client = mqtt_client.Client(protocol=mqtt_client.MQTTv311)
+client.on_connect = on_connect
+client.on_message = on_message
+
+client.connect(BROKER, PORT)
+# Bağlanır bağlanmaz konuya abone olun
+client.subscribe(TOPIC)
+
+# Sonsuz dinleme döngüsü
+client.loop_forever()
+import json
+from paho.mqtt import client as mqtt_client
+
+BROKER = 'localhost'
+PORT   = 1883
+TOPIC  = 'digital-twin/sensor'
+
+def on_connect(client, userdata, flags, rc):
+    print("Connected to MQTT, code =", rc)
+    client.subscribe(TOPIC)
+
+def on_message(client, userdata, msg):
+    print(msg.payload.decode())
+
+client = mqtt_client.Client()
+client.on_connect = on_connect
+client.on_message = on_message
+client.connect(BROKER, PORT)
+client.loop_forever()
